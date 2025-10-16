@@ -12,17 +12,23 @@ Energy-Based Transformers (EBTs) are a new approach enabling **generalizable** r
 ## Setup
 
 To set up the environment using Conda (recommended):
-```
-conda create -n ebt python=3.12
+
+```bash
+conda create -n ebt python=3.11
 conda activate ebt
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+> **GPU note (Linux, CUDA 12.1):** PyTorch GPU wheels live on a separate index. Either set `export PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cu121` before running the install step above, or append `--extra-index-url https://download.pytorch.org/whl/cu121` to the `pip install` command. The CUDA helper wheels listed in `requirements.txt` will only resolve on Linux/x86_64 and are automatically skipped on macOS/Windows.
+
+> **Heads-up:** Avoid `conda install --file requirements.txt`. The requirements file uses PEP 508 environment markers (e.g. `; platform_system == "Linux"`) that Conda can't parse and will raise `InvalidMatchSpec` errors. Always install it with `pip install -r requirements.txt` from inside your activated Conda environment.
 
 You may want to set the $HF_HOME env variable so that your data/models cache to a desired directory and posssibly the $HF_TOKEN env variable
 
 [Login](https://docs.wandb.ai/ref/cli/wandb-login) to wandb using `wandb login` inside of that environment.
 
-If there are issues with PyTorch or any other packages you may also use the `gh200_requirements.txt` or `loose_requirements.txt` for requirements for GH200s and without nvidia, pytorch, and triton packages respectively. You can also create a conda environment using the `environment.yml`
+If there are issues with PyTorch or any other packages you may also use the `gh200_requirements.txt` or `loose_requirements.txt` for requirements for GH200s and without nvidia, pytorch, and triton packages respectively. You can also create a conda environment using the simplified cross-platform [`environment.yml`](./environment.yml).
 
 For the video dataset setup please see the README at [/data/vid/](/data/vid/README.md) for dataset installation and FFPROBE installation; similarly for video inference setup please see the README at [/inference/vid/](/inference/vid/README.md).
 

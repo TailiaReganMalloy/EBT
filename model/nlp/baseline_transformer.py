@@ -10,7 +10,8 @@ from transformers import AutoTokenizer
 import math
 import random
 import os
-from model.model_utils import *
+
+from ..model_utils import init_whole_model_weights, mask_q_tokens, setup_transformer
 
 
 class Baseline_Transformer_NLP(L.LightningModule):
@@ -22,6 +23,7 @@ class Baseline_Transformer_NLP(L.LightningModule):
             self.hparams.update(vars(hparams))
         
         tokenizer = AutoTokenizer.from_pretrained(self.hparams.tokenizer, clean_up_tokenization_spaces = False)
+        self.tokenizer = tokenizer
         self.tokenizer_pad_token_id = tokenizer.eos_token_id # is token 0, was right padding things
         
         self.vocab_size = len(tokenizer) # self.vocab_size = tokenizer.vocab_size caused errors since is smaller than len(tokenizer), is 50254 for neox-20b, len tokenizer is 50277 so decided to use that

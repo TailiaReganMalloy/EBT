@@ -416,9 +416,9 @@ def analyse_tokens(input_tensor, tokenizer):
 
 def setup_ebt(hparams): # specifically for EBT not for baseline transformer
     # to prevent circular import
-    from model.ar_ebt_default import EBTDefault
-    from model.ar_ebt_time_embed import EBTTimeConcat
-    from model.ar_ebt_adaln import EBTAdaLN
+    from .ar_ebt_default import EBTDefault
+    from .ar_ebt_time_embed import EBTTimeConcat
+    from .ar_ebt_adaln import EBTAdaLN
     max_seq_len = hparams.context_length+1 # for next pred in context 
     max_seq_len = max_seq_len + 1 if hparams.ebt_type == "time_embed" else max_seq_len # need +1 since cat time embed on sequence dim
 
@@ -435,7 +435,7 @@ def setup_ebt(hparams): # specifically for EBT not for baseline transformer
     return ebt
 
 def setup_transformer(hparams): # specifically for baseline transformer
-    from model.ar_transformer import Transformer, TransformerModelArgs
+    from .ar_transformer import Transformer, TransformerModelArgs
     transformer_args = TransformerModelArgs(dim = hparams.embedding_dim, n_layers = hparams.num_transformer_blocks, n_heads = hparams.multiheaded_attention_heads, max_batch_size = hparams.batch_size_per_device, max_seq_len=hparams.context_length, weight_initialization = hparams.weight_initialization_method, ffn_dim_multiplier=hparams.ffn_dim_multiplier, weight_initialization_gain=hparams.weight_initialization_gain)
     transformer = Transformer(params=transformer_args)
     return transformer
@@ -600,7 +600,7 @@ def center_crop_arr(pil_image, image_size):
     return Image.fromarray(arr[crop_y: crop_y + image_size, crop_x: crop_x + image_size])
 
 def setup_diffusion_transformer(hparams):
-    from model.diffusion_transformer import DiT
+    from .diffusion_transformer import DiT
     assert hparams.image_dims[0] == hparams.image_dims[1], "need to use square image with current implementation"
     
     if hparams.image_task == "denoising":
@@ -617,7 +617,7 @@ def setup_diffusion_transformer(hparams):
     return dit
 
 def setup_bidirectional_ebt(hparams):
-    from model.bi_ebt_adaln import EBT
+    from .bi_ebt_adaln import EBT
     assert hparams.image_dims[0] == hparams.image_dims[1], "need to use square image with current implementation"
     
     if hparams.image_task == "denoising":
