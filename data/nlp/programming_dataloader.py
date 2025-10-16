@@ -1,8 +1,12 @@
 import os
 from typing import Any, Dict, List, Optional
 
-from datasets import Dataset as HFDataset
-from datasets import DatasetDict, load_dataset, load_from_disk
+try:
+    from datasets import Dataset as HFDataset
+    from datasets import DatasetDict, load_dataset, load_from_disk
+except ModuleNotFoundError:  # pragma: no cover - fallback for minimal environments
+    from Datasets import Dataset as HFDataset
+    from Datasets import DatasetDict, load_dataset, load_from_disk
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer
 
@@ -62,7 +66,7 @@ class ProgrammingDataset(Dataset):
     # ----------------------------------------------------------------------------------
     # Dataset helpers
     # ----------------------------------------------------------------------------------
-    def _load_dataset(self) -> HFDataset:
+    def _load_dataset(self) -> Any:
         dataset_dir = getattr(self.hparams, "dataset_dir", "") or ""
         dataset_name = getattr(self.hparams, "dataset_name", None)
         dataset_config = getattr(self.hparams, "dataset_config", None)
