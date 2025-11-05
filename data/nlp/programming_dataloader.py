@@ -8,7 +8,6 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for minimal environme
     from Datasets import Dataset as HFDataset
     from Datasets import DatasetDict, load_dataset, load_from_disk
 from torch.utils.data import Dataset
-from transformers import AutoTokenizer
 
 
 class ProgrammingDataset(Dataset):
@@ -48,6 +47,8 @@ class ProgrammingDataset(Dataset):
         if self.hparams.pretokenize_dataset:
             self._ensure_tokenizer()
             num_proc = getattr(self.hparams, "dataset_map_workers", 1)
+            if not num_proc or num_proc <= 1:
+                num_proc = None
             padding = "max_length" if self.hparams.mcmc_replay_buffer else True
             self.dataset = self.dataset.map(
                 self._tokenize_batch,
@@ -101,6 +102,8 @@ class ProgrammingDataset(Dataset):
 
     def _ensure_tokenizer(self) -> None:
         if self.tokenizer is None:
+            from transformers import AutoTokenizer
+
             self.tokenizer = AutoTokenizer.from_pretrained(
                 self.hparams.tokenizer, clean_up_tokenization_spaces=False
             )

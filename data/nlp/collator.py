@@ -1,5 +1,3 @@
-from transformers import AutoTokenizer, DataCollatorWithPadding
-
 class NLP_HF_Collator:
     def __init__(self, hparams):
         self.hparams = hparams
@@ -8,6 +6,8 @@ class NLP_HF_Collator:
         self.data_collator = None
 
     def __call__(self, batch):
+        # Lazy import to avoid multiprocessing issues on macOS
+        from transformers import AutoTokenizer, DataCollatorWithPadding
         padding = "max_length" if self.hparams.mcmc_replay_buffer else True # for replay buffer need to pad to max since all elements in replay buffer need same seq dim
         if self.hparams.pretokenize_dataset:
             if self.tokenizer is None:
