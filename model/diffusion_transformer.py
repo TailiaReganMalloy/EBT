@@ -3,7 +3,7 @@ import torch.nn as nn
 import numpy as np
 import math
 from timm.models.vision_transformer import PatchEmbed, Attention, Mlp
-from model.model_utils import *
+from .model_utils import *
 
 
 #################################################################################

@@ -10,8 +10,8 @@ from transformers import AutoTokenizer
 import math
 import random
 import os
-from model.model_utils import *
-from model.replay_buffer import CausalReplayBuffer
+from ..model_utils import *
+from ..replay_buffer import CausalReplayBuffer
 
 
 class EBT_NLP(L.LightningModule):
