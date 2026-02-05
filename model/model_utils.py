@@ -7,7 +7,6 @@ from torchmetrics import Accuracy
 import traceback
 from torchvision.transforms import functional as TF
 import torchvision.models as models
-from diffusers import AutoencoderKL
 import math
 import random
 import numpy as np
@@ -342,6 +341,7 @@ def load_image_encoder(backbone_type, backbone_size, device=None, use_ema = Fals
         model = torch.hub.load('facebookresearch/dinov2', model=f"dinov2_{backbone_name}")
         del model._parameters['mask_token'] # this is done as this param was unused and was causing pl ddp unused param issues
     elif backbone_type == "vae": # all have same encoder just different decoder
+        from diffusers import AutoencoderKL
         if use_ema:
             model = AutoencoderKL.from_pretrained("stabilityai/sd-vae-ft-ema")
         else:
